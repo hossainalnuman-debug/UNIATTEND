@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UniAttend – Teacher Portal</title>
+
+  <link rel="stylesheet" href="assets/bootstrap.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+</head>
+<body class="dashboard-body">
+
+<!-- ───────────────────────────────────────────────
+     SIDEBAR
+──────────────────────────────────────────────── -->
+<div class="sidebar" id="sidebar">
+
+  <div class="sidebar-brand">
+    <span class="brand-icon">🎓</span>
+    <span class="brand-name">UniAttend</span>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="avatar avatar-teacher" id="sidebarAvatar">MK</div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-user-name" id="sidebarName">Dr. Mostofa Kamal</div>
+      <div class="sidebar-user-role" id="sidebarRole">Professor</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-section="dashboard">
+      <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" data-section="takeClass">
+      <i class="bi bi-pencil"></i><span>Take Class Att.</span>
+    </a>
+    <a href="#" class="nav-item" data-section="takeLab">
+      <i class="bi bi-flask"></i><span>Take Lab Att.</span>
+    </a>
+    <a href="#" class="nav-item" data-section="takeMid">
+      <i class="bi bi-pencil-square"></i><span>Mid Exam Att.</span>
+    </a>
+    <a href="#" class="nav-item" data-section="takeFinal">
+      <i class="bi bi-mortarboard"></i><span>Final Exam Att.</span>
+    </a>
+    <a href="#" class="nav-item" data-section="manage">
+      <i class="bi bi-sliders"></i><span>Manage &amp; Correct</span>
+    </a>
+    <a href="#" class="nav-item" data-section="reports">
+      <i class="bi bi-bar-chart-line"></i><span>Reports</span>
+    </a>
+    <a href="#" class="nav-item" data-section="students">
+      <i class="bi bi-people"></i><span>Students</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="login.html" class="btn-logout" onclick="logout()">
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </a>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────────
+     MAIN CONTENT
+──────────────────────────────────────────────── -->
+<div class="main-content" id="mainContent">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <button class="sidebar-toggle d-lg-none" onclick="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <div class="topbar-right">
+      <span class="badge-portal badge-portal-teacher">Teacher Portal</span>
+      <div class="topbar-user" id="topbarUser">Dr. Mostofa Kamal</div>
+    </div>
+  </div>
+
+  <!-- ─── DASHBOARD ─── -->
+  <section id="sec-dashboard" class="page-section active">
+    <div class="section-header">
+      <h2 class="section-title" id="teacherWelcome">Teacher Dashboard</h2>
+      <p class="section-sub" id="teacherMeta">Loading...</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="stat-card stat-blue">
+          <div class="stat-icon"><i class="bi bi-book-half"></i></div>
+          <div class="stat-value" id="t_totalCourses">—</div>
+          <div class="stat-label">My Courses</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card stat-purple">
+          <div class="stat-icon"><i class="bi bi-people"></i></div>
+          <div class="stat-value" id="t_totalStudents">—</div>
+          <div class="stat-label">My Students</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card stat-green">
+          <div class="stat-icon"><i class="bi bi-clipboard-check"></i></div>
+          <div class="stat-value" id="t_totalRecords">—</div>
+          <div class="stat-label">Total Records</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card stat-teal">
+          <div class="stat-icon"><i class="bi bi-graph-up"></i></div>
+          <div class="stat-value" id="t_avgAtt">—</div>
+          <div class="stat-label">Avg Attendance</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course cards -->
+    <h5 class="mb-3 fw-semibold">My Courses</h5>
+    <div class="row g-3" id="teacherCourseCards"></div>
+  </section>
+
+  <!-- ─── TAKE CLASS ATTENDANCE ─── -->
+  <section id="sec-takeClass" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-pencil me-2"></i>Take Class Attendance</h2>
+      <p class="section-sub">Mark daily class attendance for your courses</p>
+    </div>
+    <div id="takeAttForm" data-type="theory" data-exam=""></div>
+  </section>
+
+  <!-- ─── TAKE LAB ATTENDANCE ─── -->
+  <section id="sec-takeLab" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-flask me-2"></i>Take Lab Attendance</h2>
+      <p class="section-sub">Mark lab session attendance</p>
+    </div>
+    <div id="takeLabForm" data-type="lab" data-exam=""></div>
+  </section>
+
+  <!-- ─── MID EXAM ATTENDANCE ─── -->
+  <section id="sec-takeMid" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-pencil-square me-2"></i>Mid Exam Attendance</h2>
+      <p class="section-sub">Mark mid-term examination attendance</p>
+    </div>
+    <div id="takeMidForm" data-type="theory" data-exam="mid"></div>
+  </section>
+
+  <!-- ─── FINAL EXAM ATTENDANCE ─── -->
+  <section id="sec-takeFinal" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-mortarboard me-2"></i>Final Exam Attendance</h2>
+      <p class="section-sub">Mark final examination attendance</p>
+    </div>
+    <div id="takeFinalForm" data-type="theory" data-exam="final"></div>
+  </section>
+
+  <!-- ─── MANAGE & CORRECT ─── -->
+  <section id="sec-manage" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-sliders me-2"></i>Manage &amp; Correct Attendance</h2>
+      <p class="section-sub">Edit or correct any previously saved attendance record</p>
+    </div>
+
+    <div class="card-box mb-3">
+      <div class="card-box-header d-flex flex-wrap gap-2 align-items-center">
+        <select class="form-select w-auto" id="manageCoursesel" onchange="loadManageTable()"></select>
+        <select class="form-select w-auto" id="manageTypeSel" onchange="loadManageTable()">
+          <option value="class">Class Attendance</option>
+          <option value="lab">Lab Attendance</option>
+          <option value="mid">Mid Exam</option>
+          <option value="final">Final Exam</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="manageAlertArea"></div>
+
+    <div class="card-box">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head">
+            <tr><th>Student</th><th>Roll</th><th>Date</th><th>Type</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody id="manageTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── REPORTS ─── -->
+  <section id="sec-reports" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-bar-chart-line me-2"></i>Attendance Reports</h2>
+      <p class="section-sub">Course-wise student attendance analytics</p>
+    </div>
+
+    <div class="card-box mb-3">
+      <div class="card-box-header d-flex flex-wrap gap-2 align-items-center">
+        <select class="form-select w-auto" id="reportCourseSel" onchange="loadReportTable()"></select>
+        <button class="btn btn-outline-primary btn-sm" onclick="exportReport()">
+          <i class="bi bi-download me-1"></i> Export CSV
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-3" id="reportStatCards"></div>
+
+    <div class="card-box">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head">
+            <tr><th>#</th><th>Student</th><th>Roll</th><th>Section</th>
+                <th>Present</th><th>Absent</th><th>Total</th><th>Att %</th><th>Status</th></tr>
+          </thead>
+          <tbody id="reportTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STUDENTS ─── -->
+  <section id="sec-students" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-people me-2"></i>My Students</h2>
+      <p class="section-sub">All students enrolled in your courses</p>
+    </div>
+
+    <div class="card-box mb-3">
+      <div class="card-box-header">
+        <input type="search" class="form-control" id="studentSearch"
+               placeholder="🔍  Search by name or roll number..."
+               oninput="filterStudents(this.value)"/>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head">
+            <tr><th>#</th><th>Name</th><th>Roll No.</th><th>Dept</th>
+                <th>Semester</th><th>Section</th><th>Email</th></tr>
+          </thead>
+          <tbody id="studentsTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /.main-content -->
+
+<!-- Save Success Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="saveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive">
+    <div class="d-flex">
+      <div class="toast-body">
+        <i class="bi bi-check-circle-fill me-2"></i> Attendance saved successfully!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/bootstrap.bundle.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/teacher.js"></script>
+</body>
+</html>

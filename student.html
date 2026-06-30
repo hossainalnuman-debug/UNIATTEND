@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UniAttend – Student Portal</title>
+
+  <link rel="stylesheet" href="assets/bootstrap.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+</head>
+<body class="dashboard-body">
+
+<!-- ───────────────────────────────────────────────
+     SIDEBAR
+──────────────────────────────────────────────── -->
+<div class="sidebar" id="sidebar">
+
+  <div class="sidebar-brand">
+    <span class="brand-icon">🎓</span>
+    <span class="brand-name">UniAttend</span>
+  </div>
+
+  <!-- Student info -->
+  <div class="sidebar-user">
+    <div class="avatar avatar-student" id="sidebarAvatar">RA</div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-user-name" id="sidebarName">Rahim Ahmed</div>
+      <div class="sidebar-user-role" id="sidebarRoll">2021-CSE-001</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-section="dashboard">
+      <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" data-section="classAtt">
+      <i class="bi bi-journal-text"></i><span>Class Attendance</span>
+    </a>
+    <a href="#" class="nav-item" data-section="labAtt">
+      <i class="bi bi-flask"></i><span>Lab Attendance</span>
+    </a>
+    <a href="#" class="nav-item" data-section="midExam">
+      <i class="bi bi-pencil-square"></i><span>Mid Exam</span>
+    </a>
+    <a href="#" class="nav-item" data-section="finalExam">
+      <i class="bi bi-mortarboard"></i><span>Final Exam</span>
+    </a>
+    <a href="#" class="nav-item" data-section="semSummary">
+      <i class="bi bi-clipboard-data"></i><span>Semester Summary</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="login.html" class="btn-logout" onclick="logout()">
+      <i class="bi bi-box-arrow-left"></i> Logout
+    </a>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────────
+     MAIN CONTENT
+──────────────────────────────────────────────── -->
+<div class="main-content" id="mainContent">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <button class="sidebar-toggle d-lg-none" onclick="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <div class="topbar-right">
+      <span class="badge-portal">Student Portal</span>
+      <div class="topbar-user" id="topbarUser">Rahim Ahmed</div>
+    </div>
+  </div>
+
+  <!-- Page sections -->
+
+  <!-- ─── DASHBOARD ─── -->
+  <section id="sec-dashboard" class="page-section active">
+    <div class="section-header">
+      <h2 class="section-title">Welcome back, <span id="welcomeName">Rahim</span>!</h2>
+      <p class="section-sub" id="studentMeta">CSE &mdash; Semester 5th &mdash; Roll: 2021-CSE-001</p>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="row g-3 mb-4" id="dashStatCards">
+      <div class="col-6 col-md-3">
+        <div class="stat-card stat-blue">
+          <div class="stat-icon"><i class="bi bi-book-half"></i></div>
+          <div class="stat-value" id="totalCourses">—</div>
+          <div class="stat-label">Total Courses</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card stat-green" id="overallCard">
+          <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+          <div class="stat-value" id="overallPct">—</div>
+          <div class="stat-label">Overall Attendance</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card stat-teal">
+          <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
+          <div class="stat-value" id="totalPresent">—</div>
+          <div class="stat-label">Classes Attended</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card stat-orange">
+          <div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div>
+          <div class="stat-value" id="lowCourses">—</div>
+          <div class="stat-label">Low Attendance</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Warning banner -->
+    <div id="attWarningBanner" class="alert alert-warning d-none mb-4">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      Your overall attendance is below <strong>75%</strong>. You may be ineligible for exams.
+    </div>
+
+    <!-- Course table -->
+    <div class="card-box">
+      <div class="card-box-header">
+        <h5><i class="bi bi-table me-2"></i>Course-wise Attendance</h5>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head">
+            <tr>
+              <th>Course</th><th>Code</th><th>Type</th>
+              <th>Attended</th><th>Progress</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="dashCourseTable">
+            <tr><td colspan="6" class="text-center py-4 text-muted">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CLASS ATTENDANCE ─── -->
+  <section id="sec-classAtt" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-journal-text me-2"></i>Class Attendance</h2>
+      <p class="section-sub">View your daily class attendance per course</p>
+    </div>
+    <div class="row g-3 mb-4" id="classStatCards"></div>
+    <div class="card-box mb-3">
+      <div class="card-box-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h5 class="mb-0"><i class="bi bi-filter me-2"></i>Filter</h5>
+        <select class="form-select w-auto" id="classCourseSel" onchange="loadAttendanceDetail('class')"></select>
+      </div>
+    </div>
+    <div class="card-box">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head"><tr><th>#</th><th>Date</th><th>Status</th><th>Note</th></tr></thead>
+          <tbody id="classAttTable"><tr><td colspan="4" class="text-center py-4 text-muted">Select a course above.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── LAB ATTENDANCE ─── -->
+  <section id="sec-labAtt" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-flask me-2"></i>Lab Attendance</h2>
+      <p class="section-sub">View your lab class attendance records</p>
+    </div>
+    <div class="row g-3 mb-4" id="labStatCards"></div>
+    <div class="card-box mb-3">
+      <div class="card-box-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h5 class="mb-0"><i class="bi bi-filter me-2"></i>Filter</h5>
+        <select class="form-select w-auto" id="labCourseSel" onchange="loadAttendanceDetail('lab')"></select>
+      </div>
+    </div>
+    <div class="card-box">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head"><tr><th>#</th><th>Date</th><th>Status</th><th>Note</th></tr></thead>
+          <tbody id="labAttTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MID EXAM ─── -->
+  <section id="sec-midExam" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-pencil-square me-2"></i>Mid Exam Attendance</h2>
+      <p class="section-sub">View your mid-term examination attendance</p>
+    </div>
+    <div class="row g-3 mb-4" id="midStatCards"></div>
+    <div class="card-box">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head"><tr><th>#</th><th>Course</th><th>Code</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody id="midExamTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FINAL EXAM ─── -->
+  <section id="sec-finalExam" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-mortarboard me-2"></i>Final Exam Attendance</h2>
+      <p class="section-sub">View your semester final examination attendance</p>
+    </div>
+    <div class="row g-3 mb-4" id="finalStatCards"></div>
+    <div class="card-box">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head"><tr><th>#</th><th>Course</th><th>Code</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody id="finalExamTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SEMESTER SUMMARY ─── -->
+  <section id="sec-semSummary" class="page-section">
+    <div class="section-header">
+      <h2 class="section-title"><i class="bi bi-clipboard-data me-2"></i>Semester Summary</h2>
+      <p class="section-sub" id="semSumMeta">Complete overview for current semester</p>
+    </div>
+    <div id="semSummaryContent"></div>
+  </section>
+
+</div><!-- /.main-content -->
+
+<!-- Bootstrap JS -->
+<script src="assets/bootstrap.bundle.min.js"></script>
+<!-- Data & Helpers -->
+<script src="js/data.js"></script>
+<script src="js/helpers.js"></script>
+<!-- Student App -->
+<script src="js/student.js"></script>
+</body>
+</html>
